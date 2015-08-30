@@ -53,10 +53,11 @@ static void prv_handle_led_request(RequestType type, size_t length) {
   }
   // set the LED
   digitalWrite(LED_BUILTIN, (bool) buffer[0]);
-  Serial.print("digitalWrite():");
-  Serial.println((bool) buffer[0]);
   // ACK that the write request was received
   ArduinoPebbleSerial::write(true, NULL, 0);
+  Serial.print("digitalWrite():");
+  Serial.println((bool) buffer[0]);
+  Serial.println("write(true, NULL, 0)");
 }
 
 void loop() {
