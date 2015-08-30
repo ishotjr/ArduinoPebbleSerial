@@ -21,7 +21,7 @@ static uint8_t buffer[20];
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   // TODO: revert to Baud57600 post-debug
-  ArduinoPebbleSerial::begin_software(PEBBLE_DATA_PIN, buffer, sizeof(buffer), Baud9600, SERVICES,
+  ArduinoPebbleSerial::begin_software(PEBBLE_DATA_PIN, buffer, sizeof(buffer), Baud57600, SERVICES,
                                       NUM_SERVICES);
 
   // initialize serial (for debug)
