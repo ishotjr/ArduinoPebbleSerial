@@ -27,6 +27,8 @@ void setup() {
   // initialize serial (for debug)
   Serial.begin(9600);
   Serial.println("setup complete");
+  
+  digitalWrite(LED_BUILTIN, false);
 }
 
 static void prv_handle_uptime_request(RequestType type, size_t length) {
@@ -42,13 +44,17 @@ static void prv_handle_uptime_request(RequestType type, size_t length) {
 static void prv_handle_led_request(RequestType type, size_t length) {
   if (type != RequestTypeWrite) {
     // unexpected request type
+    Serial.print("unexpected RequestType");
     return;
   } else if (length != LED_ATTRIBUTE_LENGTH) {
     // unexpected request length
+    Serial.print("unexpected length");
     return;
   }
   // set the LED
   digitalWrite(LED_BUILTIN, (bool) buffer[0]);
+  Serial.print("digitalWrite():");
+  Serial.println((bool) buffer[0]);
   // ACK that the write request was received
   ArduinoPebbleSerial::write(true, NULL, 0);
 }
