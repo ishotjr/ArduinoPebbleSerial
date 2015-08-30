@@ -23,6 +23,10 @@ void setup() {
   // TODO: revert to Baud57600 post-debug
   ArduinoPebbleSerial::begin_software(PEBBLE_DATA_PIN, buffer, sizeof(buffer), Baud9600, SERVICES,
                                       NUM_SERVICES);
+
+  // initialize serial (for debug)
+  Serial.begin(9600);
+  Serial.println("setup complete");
 }
 
 static void prv_handle_uptime_request(RequestType type, size_t length) {
@@ -51,12 +55,16 @@ static void prv_handle_led_request(RequestType type, size_t length) {
 
 void loop() {
   if (ArduinoPebbleSerial::is_connected()) {
+    Serial.println("IS_connected()");
     static uint32_t last_notify_time = 0;
     const uint32_t current_time = millis() / 1000;
     if (current_time > last_notify_time) {
       ArduinoPebbleSerial::notify(SERVICE_ID, UPTIME_ATTRIBUTE_ID);
+      Serial.println("notify()");
       last_notify_time = current_time;
     }
+  } else {
+    Serial.println("!is_connected()");
   }
 
   uint16_t service_id;
@@ -64,16 +72,21 @@ void loop() {
   size_t length;
   RequestType type;
   if (ArduinoPebbleSerial::feed(&service_id, &attribute_id, &length, &type)) {
+    Serial.println("feed()");
     // process the request
     if (service_id == SERVICE_ID) {
+      Serial.println("correct SERVICE_ID");
       switch (attribute_id) {
         case UPTIME_ATTRIBUTE_ID:
+          Serial.println("UPTIME_ATTRIBUTE_ID");
           prv_handle_uptime_request(type, length);
           break;
         case LED_ATTRIBUTE_ID:
+          Serial.println("LED_ATTRIBUTE_ID");
           prv_handle_led_request(type, length);
           break;
         default:
+          Serial.println("unknown attribute_id");
           break;
       }
     }
