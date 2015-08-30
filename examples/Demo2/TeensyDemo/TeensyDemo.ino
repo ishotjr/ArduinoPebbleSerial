@@ -9,13 +9,19 @@ static const size_t UPTIME_ATTRIBUTE_LENGTH = 4;
 static const uint16_t SERVICES[] = {SERVICE_ID};
 static const uint8_t NUM_SERVICES = 1;
 
-static const uint8_t PEBBLE_DATA_PIN = 1;
+// TODO: make conditional per platform
+// Teensy
+//static const uint8_t PEBBLE_DATA_PIN = 1;
+// Uno
+static const uint8_t PEBBLE_DATA_PIN = 2;
+
 static uint8_t buffer[20];
 
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
-  ArduinoPebbleSerial::begin_software(PEBBLE_DATA_PIN, buffer, sizeof(buffer), Baud57600, SERVICES,
+  // TODO: revert to Baud57600 post-debug
+  ArduinoPebbleSerial::begin_software(PEBBLE_DATA_PIN, buffer, sizeof(buffer), Baud9600, SERVICES,
                                       NUM_SERVICES);
 }
 
